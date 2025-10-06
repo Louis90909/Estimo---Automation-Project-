@@ -58,7 +58,8 @@ docs/                  → Documentation, schémas, livrables & preuves
 Voici le schéma global du projet (format image) 👇  
 
 📷 **Diagramme d’architecture (PNG)**  
-<img width="64" height="64" alt="69aada765cf09671" src="https://github.com/user-attachments/assets/a92635b3-f3a9-41d1-a458-cf566afcfa84" />
+<img width="3840" height="2175" alt="Untitled diagram _ Mermaid Chart-2025-10-06-153437" src="https://github.com/user-attachments/assets/710e42c1-193b-4975-8e6d-042b2cb66209" />
+
 
 
 ```markdown
