@@ -235,44 +235,27 @@ Métier : nb d’estimations, répartition Sous/Dans/Au-dessus, volumes DVF trai
 
 Pourquoi ce duo ?
 
-
 Exigence explicite du sujet (“Grafana monitoring dashboard”).
-
 
 Standard open-source universel, facile à dockeriser et à configurer.
 
-
 Livrable attendu : un dashboard Grafana provisionné accessible via le cluster.
-
-
 
 6️⃣ Conteneurisation & Déploiement – Docker + Kubernetes (k3d/kind)
 Rôle : uniformiser l’environnement de dev, puis démontrer le déploiement distribué.
 
-
 Pourquoi Docker Compose ?
-
-
 Simplicité pour le développement local et la démo initiale : une seule commande docker compose up.
 
-
 Pourquoi Kubernetes (k3d ou kind) ?
-
-
 Nécessité du livrable “Kubernetes deployment”.
 
-
 Ces distributions locales sont gratuites et fonctionnent sur tout poste.
-
-
 Elles permettent de montrer le kubectl get pods et l’Ingress fonctionnel (preuve d’orchestration).
 
 
 Ingress : Traefik ou NGINX Ingress (un seul pour la démo).
-
-
 Packaging : Helm pour déploiement modulaire (API, Airflow, Grafana).
-
 
 Résultat attendu : cluster opérationnel et reproductible.
 
@@ -284,41 +267,25 @@ Rôle : automatiser la construction et la livraison des images Docker.
 
 
 Pourquoi ce choix ?
-
-
 Gratuit, directement intégré à GitHub.
-
-
 Permet de valider le build, lancer les tests, et pousser les images dans un registre (GHCR ou Docker Hub).
-
 
 Pipeline prévu :
 
-
 Job 1 : lint + test API.
-
 
 Job 2 : build/push des images.
 
-
 Job 3 : (optionnel) déploiement automatique sur k3d.
-
-
 
 8️⃣ Outils de support
 DBeaver → client SQL pour explorer Postgres et valider les requêtes.
-
- Raison : outil gratuit, multiplateforme, intuitif pour montrer les tables market_stats, fact_estimation pendant la soutenance.
-
+Raison : outil gratuit, multiplateforme, intuitif pour montrer les tables market_stats, fact_estimation pendant la soutenance.
 
 n8n (optionnel) → automatisation visuelle (alertes DAG, notifications).
-
- Raison : complément ergonomique à Airflow pour des automatisations “légères” (non data).
-
+Raison : complément ergonomique à Airflow pour des automatisations “légères” (non data).
 
 Make / scripts bash → pour lancer des benchmarks locaux.
-
-
 wrk ou k6 → pour mesurer la latence API (preuve de performance).
 
 
@@ -326,14 +293,12 @@ wrk ou k6 → pour mesurer la latence API (preuve de performance).
 🔐 Principes de sécurité et conformité
 Aucune donnée personnelle conservée (adresses anonymisées → zone_key commune).
 
-
 Accès à la base protégés par variables d’environnement / secrets Kubernetes.
-
 
 Pas de services exposés en public hormis l’API via ingress.
 
-
 Estimo – Simulateur de Valeur Immobilière
+
 🎯 Vision
 Estimo est une plateforme simple et accessible qui permet à n’importe quel utilisateur d’obtenir une estimation instantanée de la valeur de son bien immobilier sur le marché.
 L’objectif est double :
@@ -349,57 +314,34 @@ Aujourd’hui, beaucoup de propriétaires ou d’acheteurs ne savent pas si un p
 Les simulateurs existants sont souvent :
 opaques (peu d’explications sur le calcul),
 
-
 limités (peu de critères pris en compte),
-
-
 fermés (aucune ouverture des données).
-
-
 Estimo veut rendre l’estimation immobilière transparente, éducative et évolutive.
 
 🧩 Concept
 Une landing page (page web simple et claire) permet de renseigner les caractéristiques d’un bien :
 Localisation (adresse, code postal, commune)
 
-
 Surface habitable
-
-
 Nombre de pièces / chambres / salles de bain
-
-
 Année de construction ou ancienneté
-
-
 Type de logement (maison, appartement…)
-
-
 Étiquette énergétique (DPE)
-
-
 Autres atouts (balcon, parking, jardin…)
-
 
 → En un clic, le visiteur obtient :
 une estimation du prix de marché (avec une fourchette),
-
 
 un indice de positionnement :
 
  🔵 Sous le marché / 🟢 Dans le marché / 🔴 Au-dessus du marché,
 
-
 une courte analyse expliquant les facteurs principaux (surface, zone, état, DPE…).
-
-
 
 🧠 Valeur ajoutée
 Pour l’utilisateur : vision claire, intuitive, et sans jargon.
 
-
 Pour nous (techniquement) : les données collectées (anonymisées) alimentent une base d’apprentissage pour entraîner à terme un modèle de Machine Learning capable de prédire les prix de manière plus fine (type AVM – Automated Valuation Model).
-
 
 
 📊 Sources de données
@@ -422,16 +364,13 @@ Phase 1 – Landing page et API de simulation
 
  → capturer les entrées, retourner une estimation simple (basée sur statistiques locales).
 
-
 Phase 2 – Base de données nationale + pipeline de nettoyage
 
  → construire les tables de référence du marché.
 
-
 Phase 3 – Machine Learning
 
- → entraîner un modèle de prédiction (prix/m²) sur DVF + variables géographiques.
-
+→ entraîner un modèle de prédiction (prix/m²) sur DVF + variables géographiques.
 
 Phase 4 – Monitoring et dashboard
 
