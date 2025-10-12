@@ -50,7 +50,6 @@ docs/                  → Documentation, schémas, livrables & preuves
 | **Monitoring** | Prometheus + Grafana | Duo open-source complet pour collecter et visualiser les métriques. |
 | **Base de données** | SQLite / PostgreSQL | Facile à déployer localement et compatible avec Airflow. |
 | **Déploiement** | Kubernetes (minikube / kind) | Standard de déploiement cloud-native, requis pour le livrable final. |
-| **Automatisation complémentaire** | n8n (optionnel) | Automatiser des tâches simples sans code supplémentaire. |
 
 ---
 
