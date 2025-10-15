@@ -1,385 +1,130 @@
-# Estimo---Automation-Project-
-
-## 🎯 Objectif du projet
-Ce projet vise à construire une **infrastructure de data automation & deployment** complète, basée sur une stack open-source et gratuite.  
-L’objectif est de démontrer la capacité à :
-- Dockeriser des services (API, Airflow, Monitoring),
-- Automatiser les traitements avec Airflow,
-- Monitorer les performances via Prometheus & Grafana,
-- Et déployer l’ensemble sur Kubernetes.
-
----
-
-## 📁 Arborescence du dépôt
-frontend/              → Landing page ou interface utilisateur simple
-api/                   → API Flask/FastAPI (accès aux données ou prédictions)
-db/                    → Scripts SQL & jeux de données (CSV)
-├─ sql/
-└─ csv/
-airflow/               → DAGs d’orchestration
-├─ dags/
-└─ plugins/
-monitoring/            → Stack Prometheus + Grafana
-├─ prometheus/
-└─ grafana/
-k8s/                   → Manifests Kubernetes (déploiement, services, monitoring)
-docs/                  → Documentation, schémas, livrables & preuves
-└─ img/
+Estimo — Simulation immobilière et pipeline d’automatisation de données
 
----
+1. Contexte et vision
 
-## 📦 Livrables attendus (périmètre jury)
+Estimo est un projet de simulation immobilière visant à rendre l’estimation de la valeur des biens plus transparente, accessible et fondée sur la donnée publique.
+Il s’agit d’une infrastructure de data engineering complète, permettant de collecter, traiter, stocker et exposer des données immobilières à travers une architecture entièrement automatisée et containerisée.
 
-| Livrable | Description | Preuve (DoD) |
-|-----------|--------------|---------------|
-| **Dockerisation complète** | Tous les composants (API, Airflow, Prometheus, Grafana) sont containerisés et exécutables ensemble. | `docker-compose.yml` + captures des conteneurs en cours d’exécution. |
-| **Orchestration Airflow** | Un DAG fonctionnel planifie et exécute les tâches d’ingestion ou de traitement. | Capture de l’interface Airflow avec le DAG en “success”. |
-| **Monitoring Grafana** | Dashboards connectés à Prometheus pour suivre les métriques système et applicatives. | Capture d’écran d’un dashboard Grafana opérationnel. |
-| **Déploiement Kubernetes** | Manifests et ressources pour exécuter les services dans un cluster (minikube, kind ou autre). | Fichiers `.yaml` + preuve de `kubectl get pods`. |
-| **Benchmarks** | Évaluation de la performance et de la scalabilité (temps d’exécution, CPU/RAM, latence). | Tableau de résultats + graphique des performances. |
-| **Vidéo démo** | Courte démonstration montrant le pipeline complet en action. | Lien vers la vidéo (YouTube ou fichier). |
-| **Documentation** | Description technique, architecture, stack, limitations et suites possibles. | Ce dépôt + fichiers `docs/README.md` et schémas. |
+Le projet démontre la capacité à :
+	•	orchestrer des traitements de données avec Apache Airflow ;
+	•	assurer la persistance et la qualité via PostgreSQL ;
+	•	superviser le pipeline avec Grafana et Prometheus ;
+	•	exécuter l’ensemble dans un environnement Dockerisé et déployable sur Kubernetes.
 
----
+⸻
 
-## 🧩 Stack technique
-| Domaine | Outil / Technologie | Justification |
-|----------|--------------------|----------------|
-| **Conteneurisation** | Docker | Standard de packaging, portable et simple à exécuter. |
-| **Orchestration de tâches** | Apache Airflow | Orchestrateur open-source, très utilisé en data engineering. |
-| **Monitoring** | Prometheus + Grafana | Duo open-source complet pour collecter et visualiser les métriques. |
-| **Base de données** | SQLite / PostgreSQL | Facile à déployer localement et compatible avec Airflow. |
-| **Déploiement** | Kubernetes (minikube / kind) | Standard de déploiement cloud-native, requis pour le livrable final. |
+2. Objectif général
 
----
+Construire une plateforme unifiée pour :
+	1.	Ingestion et agrégation des données publiques immobilières (DVF, indicateurs communaux).
+	2.	Simulation et estimation du prix d’un bien via un formulaire utilisateur.
+	3.	Automatisation des traitements et mises à jour quotidiennes.
+	4.	Suivi de la qualité et de la performance via des outils open-source.
 
-## 🧱 Plan d’architecture
-Voici le schéma global du projet (format image) 👇  
+L’approche met l’accent sur la reproductibilité, la transparence et la robustesse du pipeline.
 
-📷 **Diagramme d’architecture (PNG)**  
-<img width="4100" height="2296" alt="Data Pipeline" src="https://github.com/user-attachments/assets/b4cb673e-c159-4724-968c-de764390026d" />
+⸻
 
+3. Problématique
 
+Les plateformes d’estimation immobilière existantes sont souvent :
+	•	opaques dans leurs calculs,
+	•	basées sur des données non ouvertes,
+	•	et rarement automatisées.
 
- Stack Technique – Projet 
-Estimo
-🎯 Objectif
-Concevoir une infrastructure de données complète, containerisée et orchestrée, capable de :
-collecter et agréger des données publiques immobilières (DVF, indicateurs communaux) ;
+Estimo vise à démontrer qu’un modèle d’estimation fiable peut être produit à partir de données publiques, entièrement auditées, et automatisées de bout en bout.
 
+⸻
 
-exposer un service d’estimation simple et transparent ;
+4. Données et périmètre
 
+4.1. Sources de données utilisées
+	•	DVF (Demandes de Valeurs Foncières) : base nationale des transactions immobilières (prix, surface, nature, localisation).
+	•	Indicateurs communaux (Boris Mericskay) : agrégats statistiques 2014–2024 par commune (prix moyen, volumes, répartition maison/appartement).
+	•	Entrées utilisateur (Estimation Input) : formulaires saisis via le front-end.
+	•	Schéma de qualité et de suivi (QA) : tables de contrôle interne des exécutions et de la fraîcheur des données.
 
-surveiller et automatiser les traitements via des outils professionnels open-source.
+4.2. Objectif fonctionnel
 
+Le pipeline combine ces sources pour :
+	•	produire une table de référence marché (par commune et année),
+	•	permettre une jointure directe avec les saisies utilisateur,
+	•	et générer une estimation baseline :
+estimation = surface × prix_m2_moyen(commune).
 
-Toute la stack repose sur des composants gratuits et open-source, déployables en local ou sur un cluster Kubernetes.
+⸻
 
-🧩 Vue d’ensemble
-L’architecture Estimo s’appuie sur 6 briques principales :
+5. Architecture conceptuelle
 
-Domaine
-Technologie
-Rôle clé
-Frontend
-Nginx
-Sert la landing page statique du simulateur
-Backend / API
-FastAPI (Python)
-Service REST qui calcule les estimations
-Base de données
-PostgreSQL
-Stockage unique des données marché et utilisateurs
-Orchestration / Automatisation
-Apache Airflow
-Planifie et exécute les traitements de données (ingestion DVF, agrégats, snapshots)
-Monitoring / Observabilité
-Prometheus + Grafana
-Collecte et visualisation des métriques système et applicatives
-Conteneurisation / Déploiement
-Docker + Kubernetes (k3d)
-Encapsulation, orchestration et scalabilité du projet
-CI/CD & Outils de support
-GitHub Actions + DBeaver (+ n8n optionnel)
-Intégration continue, exploration BD, automatisations légères
+5.1. Vue d’ensemble
 
+L’architecture Estimo repose sur six composants interconnectés :
+| **Domaine** | **Technologie** | **Rôle principal** |
+| --- | --- | --- |
+| Frontend | HTML/CSS/JS + Nginx | Collecte des entrées utilisateur |
+| API Backend | FastAPI (Python) | Traitement et calcul des estimations |
+| Base de données | PostgreSQL | Stockage des données DVF, marché et utilisateurs |
+| Orchestration | Apache Airflow | Automatisation des processus ETL |
+| Monitoring | Prometheus + Grafana | Supervision technique et métier |
+| Conteneurisation | Docker / Kubernetes | Déploiement reproductible et scalable |
 
-🧠 
-Justification détaillée des choix
-1️⃣ Frontend – Nginx
-Rôle : héberger une simple landing page statique contenant le formulaire d’estimation (HTML/CSS/JS).
+6. Modèle de données
 
+La base PostgreSQL constitue le socle de l’infrastructure.
+Elle est structurée autour d’un modèle en étoile (star schema) centré sur les estimations.
 
-Pourquoi ce choix ?
+6.1. Tables principales
 
+| **Table** | **Description** | **Type** |
+| --- | --- | --- |
+| estimation_input | Données saisies par l’utilisateur (zone, surface, DPE, etc.) | Fait |
+| dvf_full_raw | Transactions immobilières réelles issues du jeu DVF | Source brute |
+| communes_market_2024 | Agrégats de prix et volumes par commune pour 2024 | Dimension |
+| communes_market_yearly | Évolution temporelle par commune (2014–2024) | Dimension |
+| estimation_baseline | Vue de référence liant input ↔ marché communal | Vue analytique |
 
-Léger, stable, et natif dans Docker.
+6.2. Tables de suivi et qualité
+| **Table** | **Description** | **Rôle** |
+| --- | --- | --- |
+| qa.check_results | Résultats des contrôles qualité exécutés à chaque run Airflow | Monitoring |
+| grafana_refresh | Suivi de l’actualisation des dashboards Grafana | Monitoring |
 
+7. Orchestration et automatisation
 
-Aucun framework JS nécessaire (Next/Vite non indispensables pour le MVP).
+Les tâches sont exécutées via des DAGs Airflow, chacun correspondant à un maillon du pipeline :
+| **DAG** | **Fonction** |
+| --- | --- |
+| ingest_dvf_full | Ingestion et nettoyage des données brutes DVF |
+| build_communes_market_2024 | Agrégation des indicateurs de marché |
+| estimation_input_daily | Actualisation et contrôle qualité des entrées utilisateurs |
+| quality_checks_2024 | Validation automatisée des indicateurs et seuils métier |
 
+Chaque DAG écrit ses logs et états dans la base, assurant un suivi complet des exécutions.
 
-Requiert très peu de ressources.
 
+⸻
 
-Livrable attendu : démonstration visuelle du simulateur et connexion à l’API.
+8. Monitoring et consommation
 
+8.1. DBeaver
 
+Utilisé pour la consultation directe et la validation des tables SQL.
 
-2️⃣ Backend – FastAPI (Python)
-Rôle : cœur du projet. L’API reçoit les entrées utilisateur et calcule :
+8.2. Grafana
 
+Connecté à la base PostgreSQL et à Prometheus :
+	•	Tableaux techniques : charge CPU, mémoire, disponibilité des conteneurs.
+	•	Tableaux métiers : volumes d’estimations, cohérence des prix, qualité des données.
 
-la valeur estimée du bien (median_price_m2 × surface) ;
+8.3. Airflow UI
 
+Interface d’administration des DAGs, permettant de suivre les exécutions, logs et dépendances.
 
-la catégorie (Sous / Dans / Au-dessus du marché).
+⸻
 
-
-Pourquoi FastAPI ?
-
-
-Performant et minimaliste, adapté aux APIs data-driven.
-
-
-Auto-documentation Swagger → facilite la démo au jury.
-
-
-Intégration native avec pandas, NumPy et scikit-learn (utile pour la phase ML).
-
-
-Résultat attendu : un endpoint /estimate fonctionnel, mesurable en latence et exactitude.
-
-
-
-3️⃣ Base de données – PostgreSQL
-Rôle : stockage unique et central des trois univers de données :
-
-
-DVF géolocalisée (transactions réelles nettoyées) ;
-
-
-Indicateurs communaux (agrégats 2014–2024) ;
-
-
-Entrées utilisateurs (estimations réalisées depuis le site).
-
-
-Pourquoi Postgres ?
-
-
-Gère les agrégats statistiques (percentiles, médianes) nécessaires à la table market_stats.
-
-
-Solide, open-source, compatible SQL standard, et exploitable via DBeaver.
-
-
-Peut héberger toutes les tables du star schema (dim/fact) dans un seul schéma logique.
-
-
-Utilisation prévue :
-
-
-Base “vérité marché” : market_stats, communes_market_yearly.
-
-
-Base “utilisateurs” : estimation_input, fact_estimation.
-
-
-
-4️⃣ Orchestration – Apache Airflow
-Rôle : automatiser les tâches de préparation de données.
-
-
-DAG #1 : ingestion et nettoyage du fichier DVF géolocalisé.
-
-
-DAG #2 : calcul des statistiques marché (médianes/p25/p75 par zone).
-
-
-DAG #3 : mise à jour des agrégats communaux.
-
-
-Pourquoi Airflow ?
-
-
-Mentionné explicitement dans la consigne (“Airflow DAG orchestration”).
-
-
-Standard industriel open-source pour le scheduling et la traçabilité.
-
-
-Interface claire pour le jury (exécution DAG visible en web UI).
-
-
-Alternative complémentaire : n8n peut automatiser des notifications (alertes Slack, envoi email) mais ne remplace pas Airflow.
-
-
-
-5️⃣ Monitoring – Prometheus + Grafana
-Rôle : surveiller la santé de l’infrastructure et les KPIs métiers.
-
-
-Prometheus collecte les métriques (API, Airflow, PostgreSQL).
-
-
-Grafana les affiche dans deux dashboards :
-
-
-Technique : CPU, mémoire, latence, erreurs 4xx/5xx, uptime.
-
-
-Métier : nb d’estimations, répartition Sous/Dans/Au-dessus, volumes DVF traités.
-
-
-Pourquoi ce duo ?
-
-Exigence explicite du sujet (“Grafana monitoring dashboard”).
-
-Standard open-source universel, facile à dockeriser et à configurer.
-
-Livrable attendu : un dashboard Grafana provisionné accessible via le cluster.
-
-6️⃣ Conteneurisation & Déploiement – Docker + Kubernetes (k3d/kind)
-Rôle : uniformiser l’environnement de dev, puis démontrer le déploiement distribué.
-
-Pourquoi Docker Compose ?
-Simplicité pour le développement local et la démo initiale : une seule commande docker compose up.
-
-Pourquoi Kubernetes (k3d ou kind) ?
-Nécessité du livrable “Kubernetes deployment”.
-
-Ces distributions locales sont gratuites et fonctionnent sur tout poste.
-Elles permettent de montrer le kubectl get pods et l’Ingress fonctionnel (preuve d’orchestration).
-
-
-Ingress : Traefik ou NGINX Ingress (un seul pour la démo).
-Packaging : Helm pour déploiement modulaire (API, Airflow, Grafana).
-
-Résultat attendu : cluster opérationnel et reproductible.
-
-
-
-7️⃣ 
-CI/CD – GitHub Actions
-Rôle : automatiser la construction et la livraison des images Docker.
-
-
-Pourquoi ce choix ?
-Gratuit, directement intégré à GitHub.
-Permet de valider le build, lancer les tests, et pousser les images dans un registre (GHCR ou Docker Hub).
-
-Pipeline prévu :
-
-Job 1 : lint + test API.
-
-Job 2 : build/push des images.
-
-Job 3 : (optionnel) déploiement automatique sur k3d.
-
-8️⃣ Outils de support
-DBeaver → client SQL pour explorer Postgres et valider les requêtes.
-Raison : outil gratuit, multiplateforme, intuitif pour montrer les tables market_stats, fact_estimation pendant la soutenance.
-
-n8n (optionnel) → automatisation visuelle (alertes DAG, notifications).
-Raison : complément ergonomique à Airflow pour des automatisations “légères” (non data).
-
-Make / scripts bash → pour lancer des benchmarks locaux.
-wrk ou k6 → pour mesurer la latence API (preuve de performance).
-
-
-
-🔐 Principes de sécurité et conformité
-Aucune donnée personnelle conservée (adresses anonymisées → zone_key commune).
-
-Accès à la base protégés par variables d’environnement / secrets Kubernetes.
-
-Pas de services exposés en public hormis l’API via ingress.
-
-Estimo – Simulateur de Valeur Immobilière
-
-🎯 Vision
-Estimo est une plateforme simple et accessible qui permet à n’importe quel utilisateur d’obtenir une estimation instantanée de la valeur de son bien immobilier sur le marché.
-L’objectif est double :
-Informer le grand public avec une estimation fiable et compréhensible.
-
-
-Constituer une base de données riche pour affiner nos modèles de prédiction à partir de transactions réelles.
-
-
-
-💡 Problématique
-Aujourd’hui, beaucoup de propriétaires ou d’acheteurs ne savent pas si un prix de vente est au-dessus ou en dessous du marché réel.
-Les simulateurs existants sont souvent :
-opaques (peu d’explications sur le calcul),
-
-limités (peu de critères pris en compte),
-fermés (aucune ouverture des données).
-Estimo veut rendre l’estimation immobilière transparente, éducative et évolutive.
-
-🧩 Concept
-Une landing page (page web simple et claire) permet de renseigner les caractéristiques d’un bien :
-Localisation (adresse, code postal, commune)
-
-Surface habitable
-Nombre de pièces / chambres / salles de bain
-Année de construction ou ancienneté
-Type de logement (maison, appartement…)
-Étiquette énergétique (DPE)
-Autres atouts (balcon, parking, jardin…)
-
-→ En un clic, le visiteur obtient :
-une estimation du prix de marché (avec une fourchette),
-
-un indice de positionnement :
-
- 🔵 Sous le marché / 🟢 Dans le marché / 🔴 Au-dessus du marché,
-
-une courte analyse expliquant les facteurs principaux (surface, zone, état, DPE…).
-
-🧠 Valeur ajoutée
-Pour l’utilisateur : vision claire, intuitive, et sans jargon.
-
-Pour nous (techniquement) : les données collectées (anonymisées) alimentent une base d’apprentissage pour entraîner à terme un modèle de Machine Learning capable de prédire les prix de manière plus fine (type AVM – Automated Valuation Model).
-
-
-📊 Sources de données
-Nous nous appuierons sur des bases publiques fiables :
-DVF / DVF+ : base nationale des transactions immobilières (prix, surfaces, localisation).
-
-
-INSEE / BAN / DPE : informations géographiques, démographiques et énergétiques.
-
-
-Ces données servent de référentiel de marché pour comparer les biens soumis par les utilisateurs.
-
-🔐 Positionnement
-Estimo n’est pas une agence ni un site d’annonces.
-C’est un simulateur indépendant, fondé sur la donnée et la transparence.
-Le but : démocratiser la data immobilière tout en préparant une infrastructure scalable (Docker + API + Data pipeline).
-
-🚀 Étapes futures
-Phase 1 – Landing page et API de simulation
-
- → capturer les entrées, retourner une estimation simple (basée sur statistiques locales).
-
-Phase 2 – Base de données nationale + pipeline de nettoyage
-
- → construire les tables de référence du marché.
-
-Phase 3 – Machine Learning
-
-→ entraîner un modèle de prédiction (prix/m²) sur DVF + variables géographiques.
-
-Phase 4 – Monitoring et dashboard
-
- → observer la qualité des estimations, performance et usage.
-
-
-
-
-
-
-RGPD : données strictement agrégées, aucune PII.
+9. Principes techniques et bonnes pratiques
+	•	Anonymisation des données utilisateurs : aucune PII stockée, seules les clés de zone (insee_commune ou zone_key) sont conservées.
+	•	Indexation systématique pour accélérer les jointures et agrégations.
+	•	Schéma QA isolé pour tous les contrôles de cohérence et indicateurs de qualité.
+	•	Réplication possible via PostgreSQL dump ou connecteur Prometheus.
 
