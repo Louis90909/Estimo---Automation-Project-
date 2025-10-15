@@ -128,3 +128,11 @@ Interface d’administration des DAGs, permettant de suivre les exécutions, log
 	•	Schéma QA isolé pour tous les contrôles de cohérence et indicateurs de qualité.
 	•	Réplication possible via PostgreSQL dump ou connecteur Prometheus.
 
+Annexe 
+Data Pipeline 
+<img width="4100" height="2296" alt="Data Pipeline" src="https://github.com/user-attachments/assets/1a88648b-26f0-4193-b7be-5b238cf7f4e0" />
+
+
+
+Data Model
+<img width="2659" height="5805" alt="Data Model" src="https://github.com/user-attachments/assets/af0ea8e6-35f0-4d14-b6d0-3fd5b623b455" />
