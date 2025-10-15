@@ -1,0 +1,14 @@
+apiVersion: 1
+datasources:
+  - name: Estimo Postgres
+    type: postgres
+    access: proxy
+    url: db:5432
+    user: estimo
+    secureJsonData:
+      password: estimo
+    jsonData:
+      database: estimo
+      sslmode: disable
+      postgresVersion: 1500
+      timescaledb: false
