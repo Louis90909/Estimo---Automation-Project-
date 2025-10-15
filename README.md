@@ -57,7 +57,8 @@ docs/                  → Documentation, schémas, livrables & preuves
 Voici le schéma global du projet (format image) 👇  
 
 📷 **Diagramme d’architecture (PNG)**  
-<img width="3840" height="2175" alt="Untitled diagram _ Mermaid Chart-2025-10-06-153437" src="https://github.com/user-attachments/assets/710e42c1-193b-4975-8e6d-042b2cb66209" />
+<img width="4100" height="2296" alt="Data Pipeline" src="https://github.com/user-attachments/assets/b4cb673e-c159-4724-968c-de764390026d" />
+
 
 
  Stack Technique – Projet 
